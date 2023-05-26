@@ -42,6 +42,7 @@ const Form = ({ currentId, setCurrentId }) => {
       dispatch(createPost({ ...postData, name: user?.result?.name }, history));
       clear();
     } else {
+      console.log("we");
       dispatch(
         updatePost(currentId, { ...postData, name: user?.result?.name })
       );
@@ -79,7 +80,7 @@ const Form = ({ currentId, setCurrentId }) => {
         onSubmit={handleSubmit}
       >
         <Typography variant="h6">
-          {currentId ? `Editing "${post?.title}"` : "Creating a Memory"}
+          {currentId ? `Editing the Memory` : "Creating a Memory"}
         </Typography>
         <TextField
           name="title"

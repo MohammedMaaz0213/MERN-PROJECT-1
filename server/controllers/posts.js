@@ -11,6 +11,7 @@ export const getPosts = async (req, res) => {
       .sort({ _id: -1 })
       .limit(LIMIT)
       .skip(startIndex);
+
     res.status(200).json({
       data: posts,
       currentPage: Number(page),
@@ -41,7 +42,13 @@ export const getPostsBySearch = async (req, res) => {
 export const createPost = async (req, res) => {
   try {
     const post = req.body;
-    const postMessage = await PostMessage.create(post);
+    console.log(req.userId, "ASDASdassaasdasASDASASASDASDASDAS");
+
+    const postMessage = await PostMessage.create({
+      ...post,
+      creator: req.userId,
+      createdAt: new Date().toISOString(),
+    });
     res.status(200).json(postMessage);
   } catch (err) {
     console.log(err);
@@ -127,7 +134,7 @@ export const commentPost = async (req, res) => {
       new: true,
     });
 
-    res.json(updatePost);
+    res.json(updatedPost);
   } catch (error) {
     console.log(error);
     res.status(404).json({ message: err });

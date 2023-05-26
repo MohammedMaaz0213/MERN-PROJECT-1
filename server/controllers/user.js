@@ -6,15 +6,15 @@ import User from "../models/user.js";
 export const signin = async (req, res) => {
   const { email, password } = req.body;
   try {
-    const existingUser = await User.find({ email });
+    const existingUser = await User.findOne({ email });
 
     if (!existingUser)
       return res.status(404).json({ message: "User doesn't exist" });
     console.log(password);
-    console.log(existingUser[0].password);
+    console.log(existingUser.password);
     const isPasswordCorrect = await bcrypt.compare(
       password,
-      existingUser[0].password
+      existingUser.password
     );
 
     if (!isPasswordCorrect) return res.status(400).json("Invalid Credentials");
@@ -36,6 +36,9 @@ export const signup = async (req, res) => {
   const { email, password, confirmPassword, firstName, lastName, creator } =
     req.body;
 
+  console.log(req.body);
+  console.log("rerererereerererreqreeeree");
+
   try {
     const existingUser = await User.find({ email });
 
@@ -48,13 +51,15 @@ export const signup = async (req, res) => {
       return res.status(404).json({ message: "passwords dont match" });
 
     const hashedPassword = await bcrypt.hash(password, 12);
-
+    console.log("userrrererererererererererererrrrrrrrrrrrrrr");
+    console.log(req.userId);
     const result = await User.create({
       creator,
       email,
       password: hashedPassword,
       name: `${firstName}, ${lastName}`,
     });
+    console.log("lololololololololololololol", result);
 
     const token = jwt.sign({ email: result.email, id: result._id }, "test", {
       expiresIn: "1h",

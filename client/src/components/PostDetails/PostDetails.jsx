@@ -16,11 +16,13 @@ const {id} = useParams();
    useEffect(()=>{
     dispatch(getPost(id))
    },[id])
-    // useEffect(()=>{
-    //   if(post){
-    //        dispatch(getPostsBySearch({search:'none' , tags:post?.tags.join(",")}))
-    //   }
-    // },[post])
+
+
+    useEffect(()=>{
+      if(post){
+           dispatch(getPostsBySearch({search:'none' , tags:post?.tags.join(",")}))
+      }
+    },[post])
 
 
     
@@ -33,10 +35,14 @@ if(isLoading){
     </Paper>
   )
 }
-console.log('objectfgghg');
 const recommendedPosts = posts.filter(({_id}) => _id !==post._id ); 
-console.log(recommendedPosts );
-const openPost = (_id) => history.push(`/posts/${_id}`);
+console.log('posts are...............',posts)
+console.log('recommmendedposts are...............',recommendedPosts)
+const openPost = (id) =>{ 
+  console.log(id ,"is the didididididii")
+  
+  history(`/posts/${id}`);
+}
 
  return (
   <Paper style={{ padding: "20px", borderRadius: "15px" }} elevation={6}>
@@ -56,7 +62,7 @@ const openPost = (_id) => history.push(`/posts/${_id}`);
         </Typography>
         <Typography variant="h6">
           Created by:
-       
+       {post.name} 
         </Typography>
         <Typography variant="body1">
           {moment(post.createdAt).fromNow()}
@@ -79,15 +85,16 @@ const openPost = (_id) => history.push(`/posts/${_id}`);
             "https://user-images.githubusercontent.com/194400/49531010-48dad180-f8b1-11e8-8d89-1e61320e1d82.png"
           }
           alt={post.title}
-        />
+        /> 
       </div>
     </div>
-    {!!recommendedPosts.length && (
+    {recommendedPosts.length && (
       <div className={classes.section}>
         <Typography gutterBottom variant="h5">
+
           You might also like:
         </Typography>
-        <Divider />
+        <Divider /> 
         <div className={classes.recommendedPosts}>
           {recommendedPosts.map(
             ({ title, name, message, likes, selectedFile, _id }) => (

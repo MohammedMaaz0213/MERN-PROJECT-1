@@ -17,7 +17,7 @@ const commentsRef=  useRef();
 const handleClick = async() =>{
     const finalComment = `${user.result.name}: ${comment}`
     const newComments  = await dispatch(commentPost(finalComment, post._id))
-
+   console.log(newComments, 'my comments  sdas d sadsa d  ')
     setComments(newComments)
     setComment('')
 

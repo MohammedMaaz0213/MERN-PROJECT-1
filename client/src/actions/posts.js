@@ -12,13 +12,19 @@ import {
 } from "../constants/acionTypes.js";
 export const getPost = (id) => async (dispatch) => {
   try {
+    console.log("a");
+
     dispatch({ type: START_LOADING });
+    console.log("a");
 
     const { data } = await api.fetchPost(id);
+    console.log("a");
 
     dispatch({ type: FETCH_POST, payload: data });
+    console.log("a");
 
     dispatch({ type: END_LOADING });
+    console.log("lol");
   } catch (err) {
     console.log(err);
   }
@@ -30,7 +36,6 @@ export const getPosts = (page) => async (dispatch) => {
 
     dispatch({ type: FETCH_ALL, payload: data });
 
-    console.log(data);
     dispatch({ type: END_LOADING });
   } catch (err) {
     console.log(err);
@@ -58,10 +63,7 @@ export const createPost = (post, history) => async (dispatch) => {
     dispatch({ type: START_LOADING });
 
     const { data } = await api.createPost(post);
-    console.log("sadsadasdsa");
-    console.log(data);
     history(`/posts/${data._id}`);
-    console.log("data is ", data);
     dispatch({ type: CREATE, payload: data });
   } catch (err) {
     console.log(err);
@@ -69,6 +71,7 @@ export const createPost = (post, history) => async (dispatch) => {
 };
 export const updatePost = (id, post) => async (dispatch) => {
   try {
+    console.log("updating herer........");
     const { data } = await api.updatePost(id, post);
 
     dispatch({ type: UPDATE, payload: data });

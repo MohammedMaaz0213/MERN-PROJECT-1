@@ -13,7 +13,7 @@ const App = () => {
   return (
     <BrowserRouter>
       <Container maxwidth="xl">
-        {/* <Navbar /> */}
+        <Navbar />
         {/* <Auth /> */}
         <Routes>
           <Route path={"/"} exact element={<Navigate to="/posts" />} />

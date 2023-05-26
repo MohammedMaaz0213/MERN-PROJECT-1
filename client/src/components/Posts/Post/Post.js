@@ -22,11 +22,12 @@ const Post = ({ post, setCurrentId }) => {
   const history = useNavigate();
   const dispatch = useDispatch();
   const user = JSON.parse(localStorage.getItem("profile"));
+  const userId = user?.result.sub;
 
-  // console.log(post);
   const openPost = () => {
     history(`/posts/${post._id}`);
   };
+
   return (
     <Card raised elevation={6} className={classes.card}>
       <ButtonBase className={classes.cardAction} onClick={openPost}>
@@ -41,19 +42,7 @@ const Post = ({ post, setCurrentId }) => {
             {moment(post.createdAt).fromNow()}
           </Typography>
         </div>
-        <div className={classes.overlay2}>
-          {user?.result[0]?._id === post?.creator && (
-            <Button
-              style={{ color: "white" }}
-              size="small"
-              onClick={() => {
-                setCurrentId(post._id);
-              }}
-            >
-              <MoreHorizIcon fontSize="medium" />
-            </Button>
-          )}
-        </div>
+
         <div className={classes.details}>
           <Typography variant="body2" color="textSecondary">
             {post.tags.map((tag) => `#${tag} `)}
@@ -74,6 +63,20 @@ const Post = ({ post, setCurrentId }) => {
         </CardContent>
       </ButtonBase>
       <CardActions className={classes.cardActions}>
+        {(user?.result?.sub === post?.creator ||
+          user?.result?._id === post?.creator) && (
+          <div className={classes.overlay2}>
+            <Button
+              style={{ color: "white" }}
+              size="small"
+              onClick={() => {
+                setCurrentId(post._id);
+              }}
+            >
+              <MoreHorizIcon fontSize="medium" />
+            </Button>
+          </div>
+        )}
         <Button
           size="small"
           color="primary"
@@ -85,7 +88,8 @@ const Post = ({ post, setCurrentId }) => {
           &nbsp; Like &nbsp;
           {post.likes.length}
         </Button>
-        {user?.result[0]?._id === post?.creator && (
+        {(user?.result?.sub === post?.creator ||
+          user?.result?._id === post?.creator) && (
           <Button
             size="small"
             color="primary"

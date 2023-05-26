@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import LockOutlinedIcon from "@material-ui/icons/LockOutlined";
+import { GoogleLogin } from "@react-oauth/google";
 
 import { gapi } from "gapi-script";
 import { useDispatch } from "react-redux";
@@ -17,6 +18,7 @@ import Input from "./Input";
 import Icon from "./icon";
 import { useNavigate } from "react-router-dom";
 import { signin, signup } from "../../actions/auth";
+import jwt_decode from "jwt-decode";
 const INITIAL_STATE = {
   firstName: "",
   lastName: "",
@@ -39,6 +41,24 @@ const Auth = () => {
     } else {
       dispatch(signin(formData, history));
     }
+  };
+
+  const googleSuccess = async (res) => {
+    const result = jwt_decode(res?.credential);
+    const token = res?.credential;
+    // const result0 = result.picture
+    // console.log(result,token)
+    try {
+      dispatch({ type: "AUTH", data: { result, token } });
+      history("/");
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  const googleFailure = (error) => {
+    console.log(error);
+    console.log("Google Sign In was unsuccessful. Try Again Later");
   };
 
   const handleChange = (e) => {
@@ -107,6 +127,25 @@ const Auth = () => {
             {isSignup ? "Sign Up" : "Sign In"}
           </Button>
 
+          <GoogleLogin
+            // clientId='559357566664-up4f7fddupuseegh9u7ac6541p2fqmm7.apps.googleusercontent.com'
+            render={(renderProps) => (
+              <Button
+                className={classes.googleButton}
+                color="primary"
+                fullWidth
+                onClick={renderProps.onClick}
+                disabled={renderProps.disabled}
+                startIcon={<Icon />}
+                variant="contained"
+              >
+                Google Sign In
+              </Button>
+            )}
+            onSuccess={googleSuccess}
+            onError={googleFailure}
+            // cookiePolicy="single_host_origin"
+          />
           <Grid container justifyContent="flex-end">
             <Grid item>
               <Button onClick={switchMode}>
